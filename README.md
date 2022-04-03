@@ -1,8 +1,9 @@
 # alpaca-lambda
 
-#Instructions
-Prereqs: Make sure to have go installed
-					Sign up for Alpaca Account and get your API keys
+# Instructions
+Prereqs: 
+- Make sure to have go installed
+- Sign up for Alpaca Account and get your API keys
 					
 1. Pull down the repo using git clone
 2. Update ENV variables
