@@ -13,5 +13,5 @@ go get .
 ```
 5. Execute code using:
 ```
-go run fileName.go
+go run local_testing.go
 ```
