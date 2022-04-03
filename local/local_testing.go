@@ -60,18 +60,18 @@ func main(){
 	 
 	 var diff = lastTradePrice - prevDailyClose
 	 fmt.Printf("The diff between the latest trade of the stock and yesterdays close: %f \n",diff)
-	 var perChange = diff/lastTradePrice
+	 var perChange = diff/prevDailyClose
 	 fmt.Printf("The percent change: %f \n",perChange)
 	
 	if perChange < 0.02 && perChange > -0.015{
 		fmt.Println("-0.015 to 0.020: buy 4 dollars")
 		not = decimal.NewFromInt(1)
 	}
-	if perChange > -0.015 && perChange < -0.02 {
+	if perChange < -0.015 && perChange > -0.02 {
 		fmt.Println("-0.015 to -0.020: buy 8 dollars")
 		not = decimal.NewFromInt(4)
 	}
-	if perChange > -0.02 && perChange < -0.04 {
+	if perChange < -0.02 && perChange > -0.04 {
 		fmt.Println("-0.02 to -0.04: buy 10 dollars")
 		not = decimal.NewFromInt(8)
 	}
