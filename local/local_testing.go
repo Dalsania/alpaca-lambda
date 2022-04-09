@@ -1,7 +1,7 @@
 package main
 
 import(
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 	"log"
 	"os"
 	"fmt"
@@ -22,13 +22,15 @@ func createOrder(not decimal.Decimal, symbol string) alpaca.PlaceOrderRequest{
 }
 
 func main(){
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	  }
+	// err := godotenv.Load("../.env")
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	//   }
 	   APCA_API_KEY_ID := os.Getenv("APCA_API_KEY_ID")
 	   APCA_API_SECRET_KEY := os.Getenv("APCA_API_SECRET_KEY")
 
+	   fmt.Println(APCA_API_KEY_ID)
+	   fmt.Println(APCA_API_SECRET_KEY)
 	  marketClient := marketdata.NewClient(marketdata.ClientOpts{
 		ApiKey:    APCA_API_KEY_ID,
 		ApiSecret: APCA_API_SECRET_KEY,
@@ -36,20 +38,21 @@ func main(){
 	})
 	alpacaClient := alpaca.NewClient(alpaca.ClientOpts{
 		ApiKey:    APCA_API_KEY_ID,
-		ApiSecret: APCA_API_SECRET_KEY,
+		ApiSecret: APCA_API_SECRET_KEY,,
 		BaseURL: "https://paper-api.alpaca.markets",
 		})
-
+	 
+	
 	 var not decimal.Decimal
-	 snapshot,err:= marketClient.GetSnapshot("VOO")
+	 snapshot,err:= marketClient.GetSnapshot("TWTR")
 
 	 if err != nil {
-		 log.Printf("Failed to retrieve Snapshot Data: %p",snapshot)
+		 log.Printf("Failed to retrieve Snapshot Data: %p",err)
 	 }
 
 
 	 var prevDailyClose = snapshot.PrevDailyBar.Close
-	 latestTrade,err := marketClient.GetLatestTrade("VOO")
+	 latestTrade,err := marketClient.GetLatestTrade("TWTR")
 	 if err != nil{
 		 log.Printf("Failed to get latetest trade for stock: %p", err)
 	 }
@@ -65,21 +68,21 @@ func main(){
 	
 	if perChange < 0.02 && perChange > -0.015{
 		fmt.Println("-0.015 to 0.020: buy 4 dollars")
-		not = decimal.NewFromInt(1)
+		not = decimal.NewFromInt(4)
 	}
 	if perChange < -0.015 && perChange > -0.02 {
 		fmt.Println("-0.015 to -0.020: buy 8 dollars")
-		not = decimal.NewFromInt(4)
+		not = decimal.NewFromInt(8)
 	}
 	if perChange < -0.02 && perChange > -0.04 {
 		fmt.Println("-0.02 to -0.04: buy 10 dollars")
-		not = decimal.NewFromInt(8)
+		not = decimal.NewFromInt(10)
 	}
 	if perChange < -0.05  {
 		fmt.Println("losses greater than -0.05: buy 12 dollars")
 		not = decimal.NewFromInt(12)
 	}
-	orderStruct := createOrder(not, "VOO")
+	orderStruct := createOrder(not, "TWTR")
 	_,err = alpacaClient.PlaceOrder(orderStruct)
 	if err != nil{
 		log.Printf("Failed to place order: %s", err)
